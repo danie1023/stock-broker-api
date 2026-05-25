@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrimeTrade • Stock Broker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .ticker { animation: scroll 35s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .active { color: #10b981; border-bottom: 2px solid #10b981; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white">
+
+  <!-- Navbar -->
+  <nav class="bg-black border-b border-zinc-800 sticky top-0 z-50">
+    <div class="max-w-screen-2xl mx-auto px-8 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-10">
+        <div class="flex items-center gap-2">
+          <span class="text-3xl font-bold text-emerald-500">PT</span>
+          <h1 class="text-2xl font-semibold">PrimeTrade</h1>
+        </div>
+        
+        <div class="hidden md:flex gap-8 text-sm font-medium">
+          <a href="#" onclick="switchTab(0)" class="hover:text-emerald-400 active">Markets</a>
+          <a href="#" onclick="switchTab(1)" class="hover:text-emerald-400">Portfolio</a>
+          <a href="#" onclick="switchTab(2)" class="hover:text-emerald-400">Trade</a>
+          <a href="#" onclick="switchTab(3)" class="hover:text-emerald-400">Watchlist</a>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="relative">
+          <input id="search" type="text" placeholder="Search stocks..." 
+                 class="bg-zinc-900 border border-zinc-700 rounded-2xl px-5 py-3 w-72 focus:outline-none focus:border-emerald-500 text-sm">
+        </div>
+        <button onclick="showLogin()" class="px-6 py-2.5 hover:bg-zinc-900 rounded-xl">Log in</button>
+        <button onclick="showSignup()" class="bg-emerald-500 hover:bg-emerald-600 px-7 py-2.5 font-semibold rounded-2xl">Open Account</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Live Ticker -->
+  <div class="bg-zinc-900 border-b border-zinc-800 py-3 overflow-hidden text-sm">
+    <div id="ticker" class="ticker flex whitespace-nowrap"></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-screen-2xl mx-auto px-8 py-8" id="main-content">
+    <!-- Markets Tab -->
+    <div id="tab-0">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-8 bg-zinc-900 rounded-3xl p-8">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h2 class="text-3xl font-bold" id="stock-symbol">AAPL</h2>
+              <p class="text-emerald-400 text-2xl" id="stock-price">$226.84</p>
+            </div>
+            <p class="text-emerald-400 text-lg">+4.82 (+2.17%)</p>
+          </div>
+          <canvas id="priceChart" height="140"></canvas>
+        </div>
+
+        <div class="lg:col-span-4 bg-zinc-900 rounded-3xl p-8">
+          <h3 class="font-semibold mb-6">Quick Trade</h3>
+          <input id="symbol-input" value="AAPL" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-4">
+          <input id="qty-input" type="number" value="10" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-6">
+          <button onclick="executeTrade()" class="w-full bg-emerald-500 hover:bg-emerald-600 py-6 text-lg font-semibold rounded-3xl">
+            BUY AAPL
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Tab -->
+    <div id="tab-1" class="hidden">
+      <h2 class="text-3xl font-bold mb-8">Portfolio • $28,472.81</h2>
+      <div class="bg-zinc-900 rounded-3xl p-8">
+        <div id="portfolio-holdings" class="space-y-6"></div>
+      </div>
+    </div>
+
+    <!-- Watchlist Tab -->
+    <div id="tab-3" class="hidden">
+      <h2 class="text-3xl font-bold mb-8">Watchlist</h2>
+      <div id="watchlist" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </div>
+  </div>
+
+  <script>
+    // Ticker
+    const tickers = ["AAPL +2.34% • TSLA -1.12% • NVDA +4.67% • MSFT +0.89% • AMZN -0.45% • GOOGL +2.10% • "];
+    document.getElementById('ticker').innerHTML = tickers.join('') + tickers.join('');
+
+    // Portfolio
+    document.getElementById('portfolio-holdings').innerHTML = `
+      <div class="flex justify-between py-4 border-b border-zinc-800">
+        <div><strong>AAPL</strong> • 142 shares</div>
+        <div class="text-right">$22,684 <span class="text-emerald-400">+3.8%</span></div>
+      </div>
+      <div class="flex justify-between py-4 border-b border-zinc-800">
+        <div><strong>NVDA</strong> • 45 shares</div>
+        <div class="text-right">$6,388 <span class="text-emerald-400">+4.1%</span></div>
+      </div>
+    `;
+
+    // Watchlist
+    document.getElementById('watchlist').innerHTML = `
+      <div class="bg-zinc-900 p-6 rounded-3xl"><strong>AAPL</strong><p class="text-3xl mt-2">$226.84</p><span class="text-emerald-400">+2.17%</span></div>
+      <div class="bg-zinc-900 p-6 rounded-3xl"><strong>NVDA</strong><p class="text-3xl mt-2">$141.97</p><span class="text-emerald-400">+4.12%</span></div>
+      <div class="bg-zinc-900 p-6 rounded-3xl"><strong>TSLA</strong><p class="text-3xl mt-2">$302.45</p><span class="text-red-400">-1.45%</span></div>
+    `;
+
+    // Chart
+    let chart;
+    function createChart() {
+      const ctx = document.getElementById('priceChart');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['9:30','10:00','11:00','12:00','13:00','14:00','15:00','16:00'],
+          datasets: [{ label: 'Price', data: [218,221,224,223,225,228,227,226.84], borderColor: '#10b981', tension: 0.4, borderWidth: 3 }]
+        },
+        options: { plugins: { legend: { display: false }}, scales: { y: { grid: { color: '#3f3f46' }}, x: { grid: { color: '#3f3f46' }}}}
+      });
+    }
+    createChart();
+
+    function switchTab(n) {
+      document.querySelectorAll('#main-content > div').forEach(d => d.classList.add('hidden'));
+      document.getElementById(`tab-${n}`).classList.remove('hidden');
+    }
+
+    function executeTrade() {
+      const sym = document.getElementById('symbol-input').value.toUpperCase();
+      const qty = document.getElementById('qty-input').value;
+      alert(`✅ Order Filled!\nBought ${qty} shares of ${sym}`);
+    }
+
+    function showLogin() { alert("Login form would appear here"); }
+    function showSignup() { alert("Professional account opening page coming..."); }
+  </script>
+</body>
+          </html>
