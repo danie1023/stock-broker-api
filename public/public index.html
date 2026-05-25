@@ -11,151 +11,72 @@
     body { font-family: 'Inter', system-ui, sans-serif; }
     .ticker { animation: scroll 40s linear infinite; }
     @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    .active { color: #10b981; border-bottom: 3px solid #10b981; padding-bottom: 4px; }
   </style>
 </head>
-<body class="bg-zinc-950 text-white">
+<body class="bg-zinc-950 text-white min-h-screen">
 
-  <!-- Top Bar -->
   <nav class="bg-black border-b border-zinc-800 sticky top-0 z-50">
-    <div class="max-w-screen-2xl mx-auto px-8 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-12">
+    <div class="max-w-screen-2xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-10">
         <div class="flex items-center gap-3">
-          <span class="text-4xl font-black text-emerald-500 tracking-tighter">PT</span>
+          <span class="text-4xl font-black text-emerald-500">PT</span>
           <h1 class="text-2xl font-semibold">PrimeTrade</h1>
         </div>
         <div class="hidden md:flex gap-8 text-sm font-medium">
-          <a href="#" onclick="switchTab(0)" class="hover:text-emerald-400 active">Markets</a>
-          <a href="#" onclick="switchTab(1)" class="hover:text-emerald-400">Portfolio</a>
-          <a href="#" onclick="switchTab(2)" class="hover:text-emerald-400">Trade</a>
-          <a href="#" onclick="switchTab(3)" class="hover:text-emerald-400">Watchlist</a>
+          <a href="#" class="hover:text-emerald-400">Markets</a>
+          <a href="#" class="hover:text-emerald-400">Portfolio</a>
+          <a href="#" class="hover:text-emerald-400">Trade</a>
+          <a href="#" class="hover:text-emerald-400">Watchlist</a>
         </div>
       </div>
-
-      <div class="flex items-center gap-5">
-        <div class="px-5 py-2 bg-emerald-500/10 text-emerald-400 text-xs font-medium rounded-3xl border border-emerald-500/30 flex items-center gap-2">
-          <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-          MARKET OPEN
-        </div>
-        <button onclick="showLogin()" class="px-6 py-3 hover:bg-zinc-900 rounded-2xl">Log in</button>
-        <button onclick="showSignup()" class="bg-emerald-500 hover:bg-emerald-600 px-8 py-3 font-semibold rounded-3xl transition">Open Free Account</button>
-      </div>
+      <button onclick="alert('Account opening coming soon!')" class="bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-2xl font-medium">Open Free Account</button>
     </div>
   </nav>
 
-  <!-- Live Ticker -->
-  <div class="bg-zinc-900 border-b border-zinc-700 py-3 overflow-hidden text-sm font-medium">
-    <div id="ticker" class="ticker flex whitespace-nowrap text-emerald-400"></div>
+  <div class="bg-zinc-900 py-3 border-b border-zinc-700 overflow-hidden">
+    <div id="ticker" class="ticker flex whitespace-nowrap text-sm font-medium text-emerald-400"></div>
   </div>
 
-  <!-- Main Area -->
-  <div class="max-w-screen-2xl mx-auto px-8 py-10" id="main-content">
-
-    <!-- Markets Tab -->
-    <div id="tab-0">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <!-- Chart Section -->
-        <div class="lg:col-span-8 bg-zinc-900 rounded-3xl p-8">
-          <div class="flex items-center justify-between mb-8">
-            <div>
-              <h1 class="text-4xl font-bold" id="main-symbol">AAPL</h1>
-              <p class="text-3xl text-emerald-400" id="main-price">$226.84</p>
-            </div>
-            <div class="text-right">
-              <p class="text-emerald-400 text-xl">+4.82 (+2.17%)</p>
-              <p class="text-zinc-500 text-sm">Today</p>
-            </div>
-          </div>
-          <canvas id="priceChart" class="w-full" height="160"></canvas>
-        </div>
-
-        <!-- Quick Trade -->
-        <div class="lg:col-span-4 bg-zinc-900 rounded-3xl p-8 flex flex-col">
-          <h3 class="font-semibold text-xl mb-6">Quick Trade</h3>
-          <input id="trade-symbol" value="AAPL" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-4 text-lg">
-          <input id="trade-qty" type="number" value="10" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-8 text-lg">
-          <button onclick="executeTrade()" class="mt-auto bg-emerald-500 hover:bg-emerald-600 py-7 text-xl font-semibold rounded-3xl">
-            BUY NOW
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Portfolio Tab -->
-    <div id="tab-1" class="hidden">
-      <h2 class="text-3xl font-bold mb-8">Your Portfolio</h2>
-      <div class="bg-zinc-900 rounded-3xl p-10">
-        <div class="flex justify-between mb-12">
+  <div class="max-w-screen-2xl mx-auto px-6 py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-8 bg-zinc-900 rounded-3xl p-8">
+        <div class="flex justify-between mb-8">
           <div>
-            <p class="text-zinc-400">Total Balance</p>
-            <p class="text-6xl font-bold">$28,472.81</p>
+            <h1 class="text-5xl font-bold">AAPL</h1>
+            <p class="text-4xl text-emerald-400">$226.84</p>
           </div>
-          <div class="text-emerald-400 text-right text-2xl">+5.14% Today</div>
+          <p class="text-emerald-400 text-2xl">+2.17% Today</p>
         </div>
-        <div id="portfolio-list" class="space-y-8"></div>
+        <canvas id="priceChart" height="220"></canvas>
       </div>
-    </div>
 
-    <!-- Watchlist -->
-    <div id="tab-3" class="hidden">
-      <h2 class="text-3xl font-bold mb-8">My Watchlist</h2>
-      <div id="watchlist-items" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+      <div class="lg:col-span-4 bg-zinc-900 rounded-3xl p-8">
+        <h3 class="text-xl font-semibold mb-6">Quick Trade</h3>
+        <input id="symbol" value="AAPL" class="w-full bg-zinc-800 rounded-2xl px-6 py-5 mb-4">
+        <input id="qty" type="number" value="10" class="w-full bg-zinc-800 rounded-2xl px-6 py-5 mb-6">
+        <button onclick="placeOrder()" class="w-full bg-emerald-500 hover:bg-emerald-600 py-7 rounded-3xl text-lg font-semibold">BUY NOW</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // Ticker
-    const symbols = ["AAPL +2.34% • ", "TSLA -1.45% • ", "NVDA +4.67% • ", "MSFT +0.92% • ", "AMZN -0.78% • ", "GOOGL +1.89% • "];
-    document.getElementById('ticker').innerHTML = symbols.join('') + symbols.join('');
-
-    // Portfolio
-    document.getElementById('portfolio-list').innerHTML = `
-      <div class="flex justify-between items-center py-5 border-b border-zinc-800">
-        <div><strong>AAPL</strong> <span class="text-zinc-500">• 142 shares</span></div>
-        <div class="text-right">$22,684 <span class="text-emerald-400">+3.8%</span></div>
-      </div>
-      <div class="flex justify-between items-center py-5 border-b border-zinc-800">
-        <div><strong>NVDA</strong> <span class="text-zinc-500">• 45 shares</span></div>
-        <div class="text-right">$6,389 <span class="text-emerald-400">+4.1%</span></div>
-      </div>
-    `;
-
-    // Watchlist
-    document.getElementById('watchlist-items').innerHTML = `
-      <div class="bg-zinc-900 p-8 rounded-3xl"><strong class="text-2xl">AAPL</strong><p class="text-4xl mt-3">$226.84</p><span class="text-emerald-400">+2.17%</span></div>
-      <div class="bg-zinc-900 p-8 rounded-3xl"><strong class="text-2xl">NVDA</strong><p class="text-4xl mt-3">$141.97</p><span class="text-emerald-400">+4.12%</span></div>
-      <div class="bg-zinc-900 p-8 rounded-3xl"><strong class="text-2xl">TSLA</strong><p class="text-4xl mt-3">$302.45</p><span class="text-red-400">-1.45%</span></div>
-    `;
+    // Live Ticker
+    const tickers = ["AAPL +2.34% • TSLA -1.45% • NVDA +4.67% • MSFT +0.89% • AMZN -0.67% • "];
+    document.getElementById('ticker').innerHTML = tickers.join('') + tickers.join('');
 
     // Chart
-    let priceChart;
-    function initChart() {
-      const ctx = document.getElementById('priceChart');
-      if (priceChart) priceChart.destroy();
-      priceChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['9:30','10:00','11:00','12:00','13:00','14:00','15:00','16:00'],
-          datasets: [{ data: [218,221,224,223.5,225,228,227.5,226.84], borderColor: '#10b981', tension: 0.4, borderWidth: 3, pointRadius: 0 }]
-        },
-        options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#3f3f46' } }, x: { grid: { color: '#3f3f46' } } }}
-      });
-    }
-    initChart();
+    new Chart(document.getElementById('priceChart'), {
+      type: 'line',
+      data: {
+        labels: ['9:30','10:00','11:00','12:00','13:00','14:00','15:00','16:00'],
+        datasets: [{ data: [218,221,224,223,225,228,227,226.84], borderColor: '#10b981', tension: 0.4, borderWidth: 3 }]
+      },
+      options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#3f3f46' }}, x: { grid: { color: '#3f3f46' }}}}
+    });
 
-    function switchTab(n) {
-      document.querySelectorAll('#main-content > div').forEach(tab => tab.classList.add('hidden'));
-      document.getElementById(`tab-${n}`).classList.remove('hidden');
+    function placeOrder() {
+      alert("✅ Order Placed! (This is a demo)");
     }
-
-    function executeTrade() {
-      const symbol = document.getElementById('trade-symbol').value.toUpperCase();
-      const qty = document.getElementById('trade-qty').value;
-      alert(`✅ Success!\nMarket Buy Order\n${qty} shares of ${symbol} @ Market Price`);
-    }
-
-    function showLogin() { alert("🔐 Login Modal - Ready for real authentication"); }
-    function showSignup() { alert("🚀 This is where your account signup form goes (very important for legitimacy)"); }
   </script>
 </body>
 </html>
