@@ -5,7 +5,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Professional Stock Broker Landing Page
+let users = {};
+
+// ====================== LANDING PAGE ======================
 app.get('/', (req, res) => {
     res.send(`
         <!DOCTYPE html>
@@ -13,84 +15,110 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>StockPro - Premium Stock Trading</title>
+            <title>StockPro - Trade Stocks & Crypto</title>
             <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
-                .header { background: #1e2937; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+                * { margin:0; padding:0; box-sizing:border-box; }
+                body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a1428; color: #e0f2fe; }
+                .header { background: #0f1f3d; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; }
                 .logo { font-size: 28px; font-weight: bold; color: #3b82f6; }
-                .nav button { padding: 10px 25px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-                
-                .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://source.unsplash.com/random/1600x900/?stockmarket') center/cover; height: 90vh; display: flex; align-items: center; text-align: center; padding: 0 20px; }
-                .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
-                .hero p { font-size: 1.4rem; max-width: 700px; margin: 0 auto 30px; }
-                .btn { padding: 16px 40px; font-size: 1.2rem; background: #3b82f6; color: white; border: none; border-radius: 50px; cursor: pointer; }
+                .nav button { padding: 10px 24px; margin-left: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+                .hero { background: linear-gradient(rgba(10,20,40,0.9), rgba(10,20,40,0.95)), url('https://source.unsplash.com/random/1920x1080/?stockmarket'); background-size: cover; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+                .hero-content { max-width: 800px; }
+                .hero h1 { font-size: 3.8rem; margin-bottom: 20px; }
+                .hero p { font-size: 1.3rem; margin-bottom: 40px; opacity: 0.9; }
+                .btn { padding: 16px 50px; font-size: 1.2rem; background: #3b82f6; color: white; border: none; border-radius: 50px; cursor: pointer; }
                 .btn:hover { background: #2563eb; }
-
-                .section { padding: 80px 40px; text-align: center; }
-                .features { background: #1e2937; }
-                .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 40px auto; }
-                .card { background: #334155; padding: 30px; border-radius: 12px; }
-                
-                footer { background: #0a0e17; padding: 60px 40px; text-align: center; font-size: 0.9rem; color: #94a3b8; }
             </style>
         </head>
         <body>
             <div class="header">
                 <div class="logo">STOCKPRO</div>
                 <div>
-                    <a href="/login"><button>Login</button></a>
-                    <a href="#register"><button class="nav">Register</button></a>
+                    <a href="/login"><button class="nav" style="background:#1e3a8a;">Login</button></a>
+                    <a href="/register"><button class="nav" style="background:#3b82f6;">Register</button></a>
                 </div>
             </div>
 
             <section class="hero">
-                <div>
+                <div class="hero-content">
                     <h1>Trade Stocks & Crypto</h1>
-                    <p>The most advanced platform for stock market trading. Real-time data, powerful tools, and secure investments.</p>
+                    <p>The most advanced platform for stock market trading.<br>Real-time data, powerful tools, and secure investments.</p>
                     <button class="btn" onclick="window.location.href='/register'">Open Free Account</button>
                 </div>
             </section>
-
-            <section class="section features">
-                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Why Traders Choose StockPro</h2>
-                <div class="grid">
-                    <div class="card">
-                        <h3>Real-Time Market Data</h3>
-                        <p>Live prices for thousands of stocks and cryptocurrencies.</p>
-                    </div>
-                    <div class="card">
-                        <h3>Advanced Charting</h3>
-                        <p>Professional technical analysis tools used by expert traders.</p>
-                    </div>
-                    <div class="card">
-                        <h3>Secure & Fast</h3>
-                        <p>Bank-level security with instant deposits and withdrawals.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section" style="background:#1e2937;">
-                <h2>Available on All Devices</h2>
-                <p style="font-size:1.3rem; margin:20px 0;">Web • Mobile • Desktop</p>
-            </section>
-
-            <footer>
-                <p><strong>STOCKPRO</strong> - Premium Stock Trading Platform</p>
-                <p>Trade Responsibly • Past performance is not indicative of future results</p>
-                <p style="margin-top:20px;">© 2026 StockPro. All Rights Reserved.</p>
-            </footer>
         </body>
         </html>
     `);
 });
 
+// ====================== REGISTER ======================
 app.get('/register', (req, res) => {
-    res.send(`<h2>Registration Form Coming Soon...</h2><a href="/">Back to Home</a>`);
+    res.send(`
+        <div style="background:#0a1428; color:white; min-height:100vh; padding:40px; font-family:Segoe UI;">
+            <h1 style="text-align:center; color:#3b82f6;">Create Account</h1>
+            <form action="/api/register" method="POST" style="max-width:500px; margin:40px auto; background:#1e2937; padding:40px; border-radius:16px;">
+                <input type="text" name="name" placeholder="Full Name" required style="width:100%; padding:15px; margin:10px 0; background:#334155; border:none; border-radius:8px; color:white;"><br>
+                <input type="email" name="email" placeholder="Email Address" required style="width:100%; padding:15px; margin:10px 0; background:#334155; border:none; border-radius:8px; color:white;"><br>
+                <input type="password" name="password" placeholder="Password" required style="width:100%; padding:15px; margin:10px 0; background:#334155; border:none; border-radius:8px; color:white;"><br>
+                <button type="submit" style="width:100%; padding:16px; background:#3b82f6; color:white; border:none; border-radius:8px; font-size:18px; margin-top:20px;">Create Account</button>
+            </form>
+            <p style="text-align:center;"><a href="/login" style="color:#60a5fa;">Already have account? Login</a></p>
+        </div>
+    `);
 });
 
+// ====================== LOGIN ======================
 app.get('/login', (req, res) => {
-    res.send(`<h2>Login Page Coming Soon...</h2><a href="/">Back to Home</a>`);
+    res.send(`
+        <div style="background:#0a1428; color:white; min-height:100vh; padding:40px; font-family:Segoe UI;">
+            <h1 style="text-align:center; color:#3b82f6;">Login</h1>
+            <form action="/api/login" method="POST" style="max-width:500px; margin:40px auto; background:#1e2937; padding:40px; border-radius:16px;">
+                <input type="email" name="email" placeholder="Email" required style="width:100%; padding:15px; margin:10px 0; background:#334155; border:none; border-radius:8px; color:white;"><br>
+                <input type="password" name="password" placeholder="Password" required style="width:100%; padding:15px; margin:10px 0; background:#334155; border:none; border-radius:8px; color:white;"><br>
+                <button type="submit" style="width:100%; padding:16px; background:#3b82f6; color:white; border:none; border-radius:8px; font-size:18px; margin-top:20px;">Login</button>
+            </form>
+            <p style="text-align:center;"><a href="/register" style="color:#60a5fa;">Don't have account? Register</a></p>
+        </div>
+    `);
+});
+
+// API Routes
+app.post('/api/register', (req, res) => {
+    const { name, email, password } = req.body;
+    const userId = "SP" + Date.now().toString().slice(-6);
+
+    users[userId] = {
+        userId, name, email, password,
+        balance: 0,
+        profit: 0
+    };
+
+    res.send(`
+        <h2 style="text-align:center; color:#22c55e;">✅ Account Created Successfully!</h2>
+        <p style="text-align:center;">Your User ID: <strong>${userId}</strong></p>
+        <p style="text-align:center;"><a href="/login">Go to Login →</a></p>
+    `);
+});
+
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+    const user = Object.values(users).find(u => u.email === email && u.password === password);
+
+    if (!user) {
+        return res.send(`<h2 style="color:red; text-align:center;">❌ Invalid Email or Password</h2><a href="/login">Try Again</a>`);
+    }
+
+    res.send(`
+        <div style="background:#0a1428; color:white; padding:40px; text-align:center; min-height:100vh;">
+            <h1>Welcome back, ${user.name}!</h1>
+            <div style="background:#1e2937; padding:30px; border-radius:16px; max-width:500px; margin:30px auto;">
+                <h2>Balance: <span style="color:#22c55e;">\[ {user.balance}</span></h2>
+                <h2>Profit: <span style="color:#22c55e;"> \]{user.profit}</span></h2>
+            </div>
+            <p>More features coming soon...</p>
+            <a href="/">Logout</a>
+        </div>
+    `);
 });
 
 app.listen(PORT, () => {
