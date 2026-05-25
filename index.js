@@ -5,10 +5,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-let users = {};
-let admin = { email: "admin@quantumtrade.com", password: "admin123" };
-
-// ====================== HOMEPAGE ======================
+// Professional Stock Broker Landing Page
 app.get('/', (req, res) => {
     res.send(`
         <!DOCTYPE html>
@@ -16,109 +13,86 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Quantum Trade - Premium Broker</title>
+            <title>StockPro - Premium Stock Trading</title>
             <style>
-                * { margin:0; padding:0; box-sizing:border-box; }
-                body { font-family: 'Segoe UI', sans-serif; background: #0a0e17; color: #e0f2fe; }
-                .header { background: linear-gradient(90deg, #1e40af, #3b82f6); padding: 25px; text-align:center; }
-                .logo { font-size: 38px; font-weight: bold; letter-spacing: 2px; }
-                .card { background: #1e2937; margin: 25px auto; padding: 30px; border-radius: 16px; max-width: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-                input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: none; font-size: 16px; }
-                input { background: #334155; color: white; }
-                button { background: #3b82f6; color: white; font-weight: bold; cursor: pointer; }
-                button:hover { background: #2563eb; }
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
+                .header { background: #1e2937; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+                .logo { font-size: 28px; font-weight: bold; color: #3b82f6; }
+                .nav button { padding: 10px 25px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+                
+                .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://source.unsplash.com/random/1600x900/?stockmarket') center/cover; height: 90vh; display: flex; align-items: center; text-align: center; padding: 0 20px; }
+                .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
+                .hero p { font-size: 1.4rem; max-width: 700px; margin: 0 auto 30px; }
+                .btn { padding: 16px 40px; font-size: 1.2rem; background: #3b82f6; color: white; border: none; border-radius: 50px; cursor: pointer; }
+                .btn:hover { background: #2563eb; }
+
+                .section { padding: 80px 40px; text-align: center; }
+                .features { background: #1e2937; }
+                .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 40px auto; }
+                .card { background: #334155; padding: 30px; border-radius: 12px; }
+                
+                footer { background: #0a0e17; padding: 60px 40px; text-align: center; font-size: 0.9rem; color: #94a3b8; }
             </style>
         </head>
         <body>
             <div class="header">
-                <div class="logo">QUANTUM TRADE</div>
-                <p>Premium Stock & Crypto Broker</p>
+                <div class="logo">STOCKPRO</div>
+                <div>
+                    <a href="/login"><button>Login</button></a>
+                    <a href="#register"><button class="nav">Register</button></a>
+                </div>
             </div>
-            
-            <div class="card">
-                <h2>Create Account</h2>
-                <form action="/api/register" method="POST">
-                    <input type="text" name="name" placeholder="Full Name" required>
-                    <input type="email" name="email" placeholder="Email" required>
-                    <input type="password" name="password" placeholder="Password" required>
-                    <button type="submit">Register Now</button>
-                </form>
-                <p style="text-align:center; margin-top:15px;">
-                    <a href="/login" style="color:#60a5fa;">Login</a> | 
-                    <a href="/admin/login" style="color:#f59e0b;">Admin Login</a>
-                </p>
-            </div>
+
+            <section class="hero">
+                <div>
+                    <h1>Trade Stocks & Crypto</h1>
+                    <p>The most advanced platform for stock market trading. Real-time data, powerful tools, and secure investments.</p>
+                    <button class="btn" onclick="window.location.href='/register'">Open Free Account</button>
+                </div>
+            </section>
+
+            <section class="section features">
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Why Traders Choose StockPro</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Real-Time Market Data</h3>
+                        <p>Live prices for thousands of stocks and cryptocurrencies.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Advanced Charting</h3>
+                        <p>Professional technical analysis tools used by expert traders.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Secure & Fast</h3>
+                        <p>Bank-level security with instant deposits and withdrawals.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" style="background:#1e2937;">
+                <h2>Available on All Devices</h2>
+                <p style="font-size:1.3rem; margin:20px 0;">Web • Mobile • Desktop</p>
+            </section>
+
+            <footer>
+                <p><strong>STOCKPRO</strong> - Premium Stock Trading Platform</p>
+                <p>Trade Responsibly • Past performance is not indicative of future results</p>
+                <p style="margin-top:20px;">© 2026 StockPro. All Rights Reserved.</p>
+            </footer>
         </body>
         </html>
     `);
 });
 
-// User Login Page
-app.get('/login', (req, res) => { /* similar to before */ res.send(`...`); }); // I'll complete it below
-
-// ================== ADMIN LOGIN ==================
-app.get('/admin/login', (req, res) => {
-    res.send(`
-        <div style="background:#0a0e17; color:white; padding:40px; text-align:center;">
-            <h1>Admin Login</h1>
-            <form action="/api/admin/login" method="POST" style="max-width:400px;margin:auto;">
-                <input type="email" name="email" placeholder="Admin Email" value="admin@quantumtrade.com" required><br><br>
-                <input type="password" name="password" placeholder="Password" value="admin123" required><br><br>
-                <button type="submit" style="padding:15px; background:#f59e0b; width:100%;">Login as Admin</button>
-            </form>
-        </div>
-    `);
+app.get('/register', (req, res) => {
+    res.send(`<h2>Registration Form Coming Soon...</h2><a href="/">Back to Home</a>`);
 });
 
-// Register User
-app.post('/api/register', (req, res) => {
-    const { name, email, password } = req.body;
-    const userId = "QT" + Date.now().toString().slice(-6);
-
-    users[userId] = {
-        userId, name, email, password,
-        balance: 0,
-        profit: 0
-    };
-
-    res.send(`<h2>✅ Registration Successful!</h2><p>User ID: <b>${userId}</b></p><a href="/login">Login Here</a>`);
-});
-
-// User Login + Dashboard (View Only)
-app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
-    const user = Object.values(users).find(u => u.email === email && u.password === password);
-
-    if (!user) return res.send(`<h2>❌ Invalid Login</h2><a href="/login">Try Again</a>`);
-
-    res.send(`
-        <div style="background:#0a0e17; color:white; padding:30px; text-align:center;">
-            <h1>Welcome, ${user.name}</h1>
-            <div style="background:#1e2937; padding:25px; border-radius:15px; margin:20px auto; max-width:500px;">
-                <h2>Balance: <span style="color:#22c55e;">\[ {user.balance.toFixed(2)}</span></h2>
-                <h2>Profit: <span style="color:#22c55e;"> \]{user.profit.toFixed(2)}</span></h2>
-            </div>
-            <p style="color:#94a3b8;">You can only view your account.<br>Admin will fund your investment.</p>
-            <a href="/">Logout</a>
-        </div>
-    `);
-});
-
-// Admin Login
-app.post('/api/admin/login', (req, res) => {
-    const { email, password } = req.body;
-    if (email === admin.email && password === admin.password) {
-        res.send(`
-            <h2>✅ Admin Login Successful</h2>
-            <p>Admin Panel Coming Soon...</p>
-            <p>You can fund users here (will be added next).</p>
-            <a href="/">Back to Home</a>
-        `);
-    } else {
-        res.send(`<h2>❌ Wrong Admin Credentials</h2><a href="/admin/login">Try Again</a>`);
-    }
+app.get('/login', (req, res) => {
+    res.send(`<h2>Login Page Coming Soon...</h2><a href="/">Back to Home</a>`);
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Quantum Trade running on port ${PORT}`);
+    console.log(`🚀 StockPro running on port ${PORT}`);
 });
