@@ -1,35 +1,45 @@
 const express = require('express');
 const app = express();
-
-// Important for Render.com
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(express.json());
 
 // Basic route
 app.get('/', (req, res) => {
-  res.json({
-    message: "✅ Stock Market Broker API is running!",
-    status: "success",
-    time: new Date().toISOString()
-  });
+    res.json({
+        message: "Welcome to Stock Broker API",
+        status: "Running ✅"
+    });
 });
 
-// Example stock route
-app.get('/api/stocks', (req, res) => {
-  res.json({
-    message: "Stock data will be here",
-    stocks: []
-  });
+// Sample stock price route
+app.get('/api/stocks/:symbol', (req, res) => {
+    const symbol = req.params.symbol.toUpperCase();
+    
+    // Mock stock data
+    const mockStocks = {
+        'AAPL': { price: 226.84, change: 1.25 },
+        'TSLA': { price: 348.67, change: -2.45 },
+        'GOOGL': { price: 178.92, change: 0.87 },
+        'MSFT': { price: 432.15, change: 3.12 }
+    };
+
+    if (mockStocks[symbol]) {
+        res.json({
+            symbol: symbol,
+            ...mockStocks[symbol],
+            timestamp: new Date().toISOString()
+        });
+    } else {
+        res.status(404).json({ error: "Stock symbol not found" });
+    }
 });
 
-// Health check route
+// Health check
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: "healthy" });
+    res.json({ status: "healthy" });
 });
 
-// Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Stock Broker API running on http://localhost:${PORT}`);
 });
