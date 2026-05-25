@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 
 let users = {};
 
-// ====================== HOMEPAGE ======================
+// ====================== HOMEPAGE - ONLY REGISTRATION ======================
 app.get('/', (req, res) => {
     res.send(`
         <!DOCTYPE html>
@@ -17,10 +17,10 @@ app.get('/', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Stock Broker</title>
             <style>
-                body { font-family: Arial; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; text-align: center; padding: 30px; }
-                .logo { font-size: 80px; margin: 20px 0; }
-                .card { background: rgba(255,255,255,0.1); padding: 25px; margin: 20px auto; border-radius: 15px; max-width: 450px; }
-                input, button { padding: 14px; margin: 10px 0; width: 90%; border-radius: 8px; border: none; font-size: 16px; }
+                body { font-family: Arial; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; text-align: center; padding: 40px; }
+                .logo { font-size: 90px; margin: 20px 0; }
+                .card { background: rgba(255,255,255,0.1); padding: 30px; margin: 20px auto; border-radius: 15px; max-width: 450px; }
+                input, button { padding: 15px; margin: 10px 0; width: 90%; border-radius: 8px; border: none; font-size: 16px; }
                 button { background: #3b82f6; color: white; font-weight: bold; cursor: pointer; }
                 button:hover { background: #2563eb; }
             </style>
@@ -28,24 +28,50 @@ app.get('/', (req, res) => {
         <body>
             <div class="logo">📈</div>
             <h1>Stock Broker</h1>
+            <p>Create your trading account</p>
             
             <div class="card">
-                <h2>Register</h2>
+                <h2>1. Create Account</h2>
                 <form action="/api/register" method="POST">
                     <input type="text" name="name" placeholder="Full Name" required><br>
-                    <input type="email" name="email" placeholder="Email" required><br>
-                    <input type="password" name="password" placeholder="Password" required><br>
+                    <input type="email" name="email" placeholder="Email Address" required><br>
+                    <input type="password" name="password" placeholder="Create Password" required><br>
                     <button type="submit">Create Account</button>
                 </form>
+                <p style="margin-top:20px;">Already have account? <a href="/login" style="color:#60a5fa;">Login here</a></p>
             </div>
+        </body>
+        </html>
+    `);
+});
 
+// Login Page
+app.get('/login', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Login - Stock Broker</title>
+            <style>
+                body { font-family: Arial; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; text-align: center; padding: 40px; }
+                .logo { font-size: 70px; }
+                .card { background: rgba(255,255,255,0.1); padding: 30px; margin: 20px auto; border-radius: 15px; max-width: 450px; }
+                input, button { padding: 15px; margin: 10px 0; width: 90%; border-radius: 8px; border: none; font-size: 16px; }
+                button { background: #3b82f6; color: white; font-weight: bold; cursor: pointer; }
+            </style>
+        </head>
+        <body>
+            <div class="logo">📈</div>
+            <h1>Login</h1>
             <div class="card">
-                <h2>Login</h2>
                 <form action="/api/login" method="POST">
                     <input type="email" name="email" placeholder="Email" required><br>
                     <input type="password" name="password" placeholder="Password" required><br>
                     <button type="submit">Login</button>
                 </form>
+                <p><a href="/" style="color:#60a5fa;">← Back to Register</a></p>
             </div>
         </body>
         </html>
@@ -58,29 +84,33 @@ app.post('/api/register', (req, res) => {
     const userId = Date.now().toString();
 
     users[userId] = {
-        userId, name, email, password,
+        userId, 
+        name, 
+        email, 
+        password,
         balance: 0,
-        profit: 1250.75,
+        profit: 1240.50,
         transactions: []
     };
 
     res.send(`
         <h2>✅ Account Created Successfully!</h2>
         <p><strong>Your User ID:</strong> ${userId}</p>
-        <p>Save this ID and <a href="/">Login</a></p>
+        <p>Save this ID securely.</p>
+        <a href="/login">Go to Login →</a>
     `);
 });
 
-// Login → Show Dashboard
+// Login → Dashboard
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
     const user = Object.values(users).find(u => u.email === email && u.password === password);
 
     if (!user) {
-        return res.send(`<h2>❌ Invalid Email or Password</h2><a href="/">Go Back</a>`);
+        return res.send(`<h2>❌ Invalid credentials</h2><a href="/login">Try Again</a>`);
     }
 
-    // Show Dashboard after login
+    // Dashboard after login
     res.send(`
         <!DOCTYPE html>
         <html lang="en">
@@ -90,10 +120,10 @@ app.post('/api/login', (req, res) => {
             <style>
                 body { font-family: Arial; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; text-align: center; padding: 30px; }
                 .logo { font-size: 60px; }
-                .card { background: rgba(255,255,255,0.1); padding: 25px; margin: 20px auto; border-radius: 15px; max-width: 500px; }
-                button { padding: 15px; margin: 10px; width: 80%; border-radius: 8px; font-size: 17px; }
-                .deposit { background: #22c55e; }
-                .withdraw { background: #ef4444; }
+                .card { background: rgba(255,255,255,0.1); padding: 25px; margin: 15px auto; border-radius: 15px; max-width: 500px; }
+                button { padding: 16px; margin: 10px; width: 85%; border-radius: 10px; font-size: 17px; font-weight: bold; }
+                .deposit-btn { background: #22c55e; }
+                .withdraw-btn { background: #ef4444; }
             </style>
         </head>
         <body>
@@ -106,20 +136,20 @@ app.post('/api/login', (req, res) => {
             </div>
 
             <div class="card">
-                <h3>Deposit</h3>
+                <h3>Deposit Funds</h3>
                 <form action="/api/deposit" method="POST">
                     <input type="hidden" name="userId" value="${user.userId}">
-                    <input type="number" name="amount" placeholder="Enter Amount" required><br>
-                    <button class="deposit" type="submit">Deposit Money</button>
+                    <input type="number" name="amount" placeholder="Amount to Deposit" required><br>
+                    <button class="deposit-btn" type="submit">Deposit</button>
                 </form>
             </div>
 
             <div class="card">
-                <h3>Withdraw</h3>
+                <h3>Withdraw Funds</h3>
                 <form action="/api/withdraw" method="POST">
                     <input type="hidden" name="userId" value="${user.userId}">
-                    <input type="number" name="amount" placeholder="Enter Amount" required><br>
-                    <button class="withdraw" type="submit">Withdraw Money</button>
+                    <input type="number" name="amount" placeholder="Amount to Withdraw" required><br>
+                    <button class="withdraw-btn" type="submit">Withdraw (Pending)</button>
                 </form>
             </div>
 
@@ -132,26 +162,26 @@ app.post('/api/login', (req, res) => {
 // Deposit
 app.post('/api/deposit', (req, res) => {
     const { userId, amount } = req.body;
-    if (!users[userId]) return res.send(`<h2>User not found</h2><a href="/">Go Home</a>`);
+    if (!users[userId]) return res.send(`<h2>User not found</h2><a href="/">Home</a>`);
 
     users[userId].balance += parseFloat(amount);
     res.send(`<h2>✅ Deposit Successful!</h2><p>New Balance: \[ {users[userId].balance}</p><a href="/">Back to Dashboard</a>`);
 });
 
-// Withdraw - Always shows Pending
+// Withdraw - Shows Pending
 app.post('/api/withdraw', (req, res) => {
     const { userId, amount } = req.body;
-    if (!users[userId]) return res.send(`<h2>User not found</h2><a href="/">Go Home</a>`);
+    if (!users[userId]) return res.send(`<h2>User not found</h2><a href="/">Home</a>`);
 
     res.send(`
-        <h2>✅ Withdrawal Request Received</h2>
+        <h2>✅ Withdrawal Request Submitted</h2>
         <p>Amount: \]{amount}</p>
         <p><strong>Status: Pending</strong></p>
-        <p>Your request is under review.</p>
+        <p>Your withdrawal is being processed.</p>
         <a href="/">Back to Dashboard</a>
     `);
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Stock Broker running`);
 });
