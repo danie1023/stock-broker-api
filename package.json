@@ -23,7 +23,7 @@
           <span class="text-4xl font-black text-emerald-500">PT</span>
           <h1 class="text-2xl font-semibold">PrimeTrade</h1>
         </div>
-        <div class="hidden md:flex gap-8 text-sm">
+        <div class="hidden md:flex gap-8 text-sm font-medium">
           <a href="#" onclick="switchTab(0)" class="hover:text-emerald-400">Markets</a>
           <a href="#" onclick="switchTab(1)" class="hover:text-emerald-400">Portfolio</a>
           <a href="#" onclick="switchTab(2)" class="hover:text-emerald-400">Trade</a>
@@ -36,7 +36,7 @@
 
   <!-- Ticker -->
   <div class="bg-zinc-900 py-3 border-b border-zinc-700 overflow-hidden">
-    <div id="ticker" class="ticker flex whitespace-nowrap text-sm"></div>
+    <div id="ticker" class="ticker flex whitespace-nowrap text-sm font-medium text-emerald-400"></div>
   </div>
 
   <div class="max-w-screen-2xl mx-auto px-6 py-8">
@@ -49,7 +49,7 @@
             <h1 id="symbol" class="text-4xl font-bold">AAPL</h1>
             <p id="price" class="text-3xl text-emerald-400">$226.84</p>
           </div>
-          <p class="text-emerald-400 text-xl">+2.17%</p>
+          <p class="text-emerald-400 text-xl">+2.17% Today</p>
         </div>
         <canvas id="priceChart" height="200"></canvas>
       </div>
@@ -57,8 +57,8 @@
       <!-- Quick Trade -->
       <div class="lg:col-span-4 bg-zinc-900 rounded-3xl p-8">
         <h3 class="text-xl font-semibold mb-6">Quick Trade</h3>
-        <input id="symbol-input" value="AAPL" class="w-full px-6 py-5 bg-zinc-800 rounded-2xl mb-4">
-        <input id="qty-input" type="number" value="10" class="w-full px-6 py-5 bg-zinc-800 rounded-2xl mb-6">
+        <input id="symbol-input" value="AAPL" class="w-full px-6 py-5 bg-zinc-800 rounded-2xl mb-4 text-lg">
+        <input id="qty-input" type="number" value="10" class="w-full px-6 py-5 bg-zinc-800 rounded-2xl mb-6 text-lg">
         <button onclick="placeOrder()" class="w-full bg-emerald-500 hover:bg-emerald-600 py-6 rounded-3xl text-lg font-semibold">BUY NOW</button>
       </div>
     </div>
@@ -66,7 +66,7 @@
 
   <script>
     // Ticker
-    const stocks = ["AAPL +2.34% • TSLA -1.45% • NVDA +4.67% • MSFT +0.89% • AMZN -0.67% • "];
+    const stocks = ["AAPL +2.34% • TSLA -1.45% • NVDA +4.67% • MSFT +0.89% • AMZN -0.67% • GOOGL +1.89% • "];
     document.getElementById('ticker').innerHTML = stocks.join('') + stocks.join('');
 
     // Chart
@@ -74,23 +74,35 @@
       type: 'line',
       data: {
         labels: ['9:30','10:00','11:00','12:00','13:00','14:00','15:00','16:00'],
-        datasets: [{ data: [218,221,224,223,225,228,227,226.84], borderColor: '#10b981', tension: 0.4, borderWidth: 3 }]
+        datasets: [{
+          data: [218, 221, 224, 223, 225, 228, 227, 226.84],
+          borderColor: '#10b981',
+          tension: 0.4,
+          borderWidth: 3,
+          pointRadius: 0
+        }]
       },
-      options: { plugins: { legend: { display: false }}, scales: { y: { grid: { color: '#3f3f46' }}, x: { grid: { color: '#3f3f46' }}}}
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: '#3f3f46' } },
+          x: { grid: { color: '#3f3f46' } }
+        }
+      }
     });
 
     function placeOrder() {
-      const sym = document.getElementById('symbol-input').value;
+      const sym = document.getElementById('symbol-input').value.toUpperCase();
       const qty = document.getElementById('qty-input').value;
-      alert(`✅ Order Placed!\nBought ${qty} shares of ${sym}`);
+      alert(`✅ Order Placed Successfully!\nBought ${qty} shares of ${sym}`);
     }
 
     function switchTab(n) {
-      alert("Tab " + n + " clicked - More pages coming soon");
+      alert(`Tab ${n} clicked - More features coming soon`);
     }
 
     function showSignup() {
-      alert("Account opening flow would start here");
+      alert("Professional account opening flow would start here");
     }
   </script>
 </body>
