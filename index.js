@@ -14,5 +14,5 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 PrimeTrade running → http://localhost:${PORT}`);
+  console.log(`🚀 Running on port ${PORT}`);
 });
